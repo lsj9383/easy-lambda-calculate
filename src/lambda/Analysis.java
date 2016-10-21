@@ -5,25 +5,25 @@ import java.util.Scanner;
 
 public class Analysis {
 	
-	public static int Integer(Expression exp){
+	public static void Integer(Expression exp){
 		Expression cal = new Call(new Call(exp, new INC()), new Number(0));
 		Expression result =cal.Eval(); 
-		return ((Number)result).number;
+		System.out.println("->"+((Number)result).number);
 	}
 	
 	public static Expression Execute(String origin){
 		
 		if(origin.equals("")){	// ‰»Î»ÙŒ™ø’£¨∑≈∆˙
 			return null;
-		}else if(origin.indexOf("#IMPORT") != -1){
+		}else if(origin.indexOf("@IMPORT") != -1){
 			String[] parts = origin.split(" ");
-			Interpreter.LoadDefinition(parts[1].substring(1, parts[1].length()-1));
+			Interpreter.LoadModule(parts[1].substring(1, parts[1].length()-1));
 			return new Expression();
-		}else if(origin.indexOf("#JAVA") != -1){
+		}else if(origin.indexOf("@JAVA") != -1){
 			ArrayList<String> parts = Split(origin);
-			System.out.println(Analysis.Integer(Expression.AST(parts.get(1))));
+			Analysis.Integer(Expression.AST(parts.get(1)));
 			return new Expression();
-		}else if(origin.indexOf("#REDUCE") != -1){
+		}else if(origin.indexOf("@REDUCE") != -1){
 			ArrayList<String> parts = Split(origin);
 			DisplayReduce(Expression.AST(parts.get(1)));
 			return new Expression();
@@ -38,7 +38,7 @@ public class Analysis {
 	
 	private static void DisplayReduce(Expression exp){
 		while(exp != null){
-			System.out.println(exp);
+			System.out.println("->"+exp);
 			exp = exp.Reduce();			
 		}
 	}

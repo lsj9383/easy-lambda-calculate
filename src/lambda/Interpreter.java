@@ -7,12 +7,11 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 public class Interpreter {
+	//主循环
 	public static void Loop(){
-		
-		
 		//1).读取文件
-		LoadDefinition("./src/Main.lc");
-		System.out.println("======================================");
+		LoadModule("./src/Main.lc");
+		System.out.println("===========================================================");
 		
 		//2).控制台循环
 		while(true){
@@ -25,32 +24,34 @@ public class Interpreter {
 			}while(exp.equals(""));
 			
 			//2.)执行
-			Analysis.Execute(exp);
+			ShowExpression(Analysis.Execute(exp));
 		}
 	}
 	
-	public static void LoadDefinition(String fileName){		
+	//加载某个文件的内容
+	public static void LoadModule(String fileName){		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
-			String exp = null;
 			
-			do {
-				exp = br.readLine();
-				if(exp==null){
-					break;
+			String exp =  br.readLine();
+			while(exp != null) {
+				if(exp.replace(" ", "").replace("\t", "").replaceAll("\n", "").length()==0){
+					exp = br.readLine();
+					continue;
 				}
 				System.out.println(exp);
-				Expression EXP = Analysis.Execute(exp);
-				if(EXP != null){
-					if(EXP.Eval() != null){
-						System.out.println(EXP.Eval().toString());	
-					}
-				}
-			} while (true);
-			
-		} catch (Exception e) {
-			System.out.println(fileName + "catch wrong!");
-		}
+				ShowExpression(Analysis.Execute(exp));
+				exp = br.readLine();
+			}
+		} catch (Exception e) {System.out.println(fileName + "catch wrong!");}
 		return ;
+	}
+	
+	private static void ShowExpression(Expression EXP){
+		if(EXP != null){
+			if(EXP.Eval() != null){
+				System.out.println("->"+EXP.Eval().toString());	
+			}
+		}
 	}
 }

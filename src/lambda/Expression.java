@@ -3,29 +3,18 @@ package lambda;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/*
- * 
- * <exp> := Indentify
- * 		 := ¦Ë.<exp> { <exp> }
- * 		 := (<exp> <exp>)
- * 
- * */
-
 public class Expression {
 	
-	public static Environment env;
-	static{
-		env = new Environment();
-	}
+	public static Environment env = new Environment();
 	
-	protected Expression Replace(Variable origin, Expression replacement){return null;}
 	public Expression Eval(){return null;}
 	public Expression Reduce(){return null;}
 	
-	public boolean canCall(){return false;}
-	public boolean canReduce(){return false;}
-	public boolean isNumber(){ return false; }
-	public boolean isInc(){return false;}
+	protected Expression Replace(Variable origin, Expression replacement){return null;}
+	protected boolean canCall(){return false;}
+	protected boolean canReduce(){return false;}
+	protected boolean isNumber(){ return false; }
+	protected boolean isInc(){return false;}
 	
 	public static Expression AST(String origin){
 		ArrayList<String> parts = Analysis.Split(origin);
@@ -53,7 +42,7 @@ class Number extends Expression{
 	}
 	
 	@Override
-	public boolean isNumber() {
+	protected boolean isNumber() {
 		return true;
 	}
 	
@@ -75,7 +64,7 @@ class INC extends Expression{
 	}
 	
 	@Override
-	public boolean isInc(){
+	protected boolean isInc(){
 		return true;
 	}
 	
@@ -118,7 +107,7 @@ class Variable extends Expression{
 	}
 	
 	@Override
-	public boolean canReduce() {
+	protected boolean canReduce() {
 		return true;
 	}
 	
@@ -175,28 +164,20 @@ class Call extends Expression{
 			return new Call(left, right.Reduce());
 		}else{
 			Function Left = (Function)left.Eval();
-			Expression Right = right.Eval();
-			Expression Result = Left.body.Replace(Left.parameter, Right);
-			return Result;
+			return Left.body.Replace(Left.parameter, right.Eval());
 		}
 	}
 	
 	@Override
 	public Expression Eval(){
 		if(left.canCall()){
-			Expression Left = left.Eval();
-			Expression Right = right.Eval();
-			return new Call(Left, Right).Eval();
+			return new Call(left.Eval(), right.Eval()).Eval();
 		}else{
 			if(!left.isInc()){
 				Function Left = (Function)left.Eval();
-				Expression Right = right.Eval();
-				Expression tmp = Left.body.Replace(Left.parameter, Right);
-				Expression result = tmp.Eval();
-				return result;
+				return Left.body.Replace(Left.parameter, right.Eval()).Eval();
 			}else{
-				Expression Right = right.Eval();
-				return new Number(((Number)Right).number+1);
+				return new Number(((Number)right.Eval()).number+1);
 			}
 		}
 	}
@@ -209,17 +190,17 @@ class Call extends Expression{
 	}
 	
 	@Override
-	public boolean canCall() {
+	protected boolean canCall() {
+		return true;
+	}
+	
+	@Override
+	protected boolean canReduce() {
 		return true;
 	}
 	
 	@Override
 	public String toString(){
 		return left.toString()+" ["+right.toString()+"]";
-	}
-	
-	@Override
-	public boolean canReduce() {
-		return true;
 	}
 }
