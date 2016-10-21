@@ -123,7 +123,7 @@ class INC extends Expression{
 	
 	@Override
 	public String toString(){
-		return "λ.n (n+1)";
+		return "INC";
 	}
 	
 	@Override
@@ -144,7 +144,7 @@ class Variable extends Expression{
 	public Expression Eval(){
 		Expression expression = env.Find(name);
 		Expression Result = expression.Eval();
-		return env.Find(name).Eval();
+		return Result;
 	}
 	
 	@Override
@@ -172,13 +172,12 @@ class Function extends Expression{
 	}
 	
 	@Override
-	public Expression Replace(Variable origin, Expression replacement) {
-		
+	public Expression Replace(Variable origin, Expression replacement) {	
 		if(parameter.name.equals(origin.name)){	//约束变量不替换
 			return this;
 		}else{
-			body = body.Replace(origin, replacement);
-			return this;
+			Expression Body = body.Replace(origin, replacement);
+			return new Function(parameter, Body);
 		}
 	}
 	
@@ -191,7 +190,6 @@ class Function extends Expression{
 	public String toString(){
 		return "λ."+parameter.toString()+" { "+body.toString()+" }";
 	}
-	
 }
 
 class Call extends Expression{
@@ -206,26 +204,28 @@ class Call extends Expression{
 	@Override
 	public Expression Eval(){
 		if(left.canCall()){
-			left = left.Eval();
-			right = right.Eval();
-			return this.Eval();
+			Expression Left = left.Eval();
+			Expression Right = right.Eval();
+			return new Call(Left, Right).Eval();
 		}else{
 			if(!left.isInc()){
-				Function fun = (Function)left.Eval();
-				Expression result = fun.body.Replace(fun.parameter, right.Eval()).Eval();
+				Function Left = (Function)left.Eval();
+				Expression Right = right.Eval();
+				Expression tmp = Left.body.Replace(Left.parameter, Right);
+				Expression result = tmp.Eval();
 				return result;
 			}else{
-				right = right.Eval();
-				return new Number(((Number)right).number+1);
+				Expression Right = right.Eval();
+				return new Number(((Number)Right).number+1);
 			}
 		}
 	}
 	
 	@Override
 	public Expression Replace(Variable origin, Expression replacement) {
-		left = left.Replace(origin, replacement);
-		right = right.Replace(origin, replacement);
-		return this;
+		Expression Left = left.Replace(origin, replacement);
+		Expression Right = right.Replace(origin, replacement);
+		return new Call(Left, Right);
 	}
 	
 	@Override

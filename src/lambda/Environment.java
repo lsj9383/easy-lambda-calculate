@@ -15,4 +15,9 @@ public class Environment {
 	public Expression Find(String name){
 		return Buffer.get(name);
 	}
+	
+	@Override
+	public String toString(){
+		return Buffer.toString();
+	}
 }
