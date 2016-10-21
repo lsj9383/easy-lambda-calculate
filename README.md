@@ -1,7 +1,7 @@
 #EasyLC
 一种简单的Lambda Calculus解释器Java实现。在支持Lambda Calculus的符号规则的前提下，有着易调试，易编写的特性。
 <p align="center">
-  <img src="https://raw.githubusercontent.com/lsj9383/EasyLC/blob/master/icon/title.png?raw=true" alt="Y"/>
+  <img src="https://github.com/lsj9383/EasyLC/blob/master/icon/title.png?raw=true" alt="Y"/>
 </p>
 
 ##一、运行
