@@ -15,7 +15,13 @@ public class Interpreter {
 		
 		
 		Analysis.Execute("INC		= (lambda n (lambda p (lambda x (p ((n p) x)))))");
-		Analysis.Execute("FOUR		= (INC THREE)");
+		Analysis.Execute("DEC		= (lambda n (LEFT ((n SLIDE) ((PAIR ZERO) ZERO))))");
+		Analysis.Execute("ADD		= (lambda m (lambda n ((n INC) m)))");
+		Analysis.Execute("SUB		= (lambda m (lambda n ((n DEC) m)))");
+		Analysis.Execute("FIVE		= (INC (INC THREE))");
+		Analysis.Execute("FOUR		= (DEC FIVE)");
+		Analysis.Execute("NINE		= ((ADD FIVE) FOUR)");
+		Analysis.Execute("SEVEN		= ((SUB NINE) TWO)");
 		
 		Analysis.Execute("PAIR		= (lambda x (lambda y (lambda f ((f x) y))))");
 		Analysis.Execute("LEFT		= (lambda p (p (lambda x (lambda y x))))");
@@ -30,5 +36,9 @@ public class Interpreter {
 		Analysis.Execute("MY_PAIR  = ((PAIR ONE) TWO)");
 		Analysis.Execute("MY_SLIDE = (SLIDE MY_PAIR)");
 		System.out.println(Analysis.Integer( new Call(new Variable("LEFT"), new Variable("MY_SLIDE"))) );
+		System.out.println(Analysis.Integer( new Variable("FOUR")) );
+		System.out.println(Analysis.Integer( new Variable("FIVE")) );
+		System.out.println(Analysis.Integer( new Variable("NINE")) );
+		System.out.println(Analysis.Integer( new Variable("SEVEN")) );
 	}
 }
