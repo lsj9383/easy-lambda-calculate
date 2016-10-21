@@ -20,8 +20,9 @@ public class Expression {
 	
 	public Expression Replace(Variable origin, Expression replacement){return null;}
 	public Expression Eval(){return null;}
-	
+	public Expression Reduce(){return null;}
 	public boolean canCall(){return false;}
+	public boolean canReduce(){return false;}
 	public boolean isNumber(){ return false; }
 	public boolean isInc(){return false;}
 	
@@ -145,10 +146,13 @@ class Variable extends Expression{
 	}
 	
 	@Override
+	public Expression Reduce() {
+		return env.Find(name);
+	}
+	
+	@Override
 	public Expression Eval(){
-		Expression expression = env.Find(name);
-		Expression Result = expression.Eval();
-		return Result;
+		return env.Find(name).Eval();
 	}
 	
 	@Override
@@ -158,6 +162,11 @@ class Variable extends Expression{
 		}else{
 			return this;
 		}
+	}
+	
+	@Override
+	public boolean canReduce() {
+		return true;
 	}
 	
 	@Override
@@ -176,19 +185,19 @@ class Function extends Expression{
 	}
 	
 	@Override
+	public Expression Eval(){
+		return this;
+	}
+	
+	@Override
 	public Expression Replace(Variable origin, Expression replacement) {	
 		if(parameter.name.equals(origin.name)){	//约束变量不替换
 			return this;
 		}else{
-			Expression Body = body.Replace(origin, replacement);
-			return new Function(parameter, Body);
+			return new Function(parameter, body.Replace(origin, replacement));
 		}
 	}
 	
-	@Override
-	public Expression Eval(){
-		return this;
-	}
 	
 	@Override
 	public String toString(){
@@ -203,6 +212,20 @@ class Call extends Expression{
 	public Call(Expression left, Expression right){
 		this.left = left;
 		this.right = right;
+	}
+	
+	@Override
+	public Expression Reduce() {
+		if(left.canReduce()){
+			return new Call(left.Reduce(), right);
+		}else if(right.canReduce()){
+			return new Call(left, right.Reduce());
+		}else{
+			Function Left = (Function)left.Eval();
+			Expression Right = right.Eval();
+			Expression Result = Left.body.Replace(Left.parameter, Right);
+			return Result;
+		}
 	}
 	
 	@Override
@@ -240,5 +263,10 @@ class Call extends Expression{
 	@Override
 	public String toString(){
 		return left.toString()+" ["+right.toString()+"]";
+	}
+	
+	@Override
+	public boolean canReduce() {
+		return true;
 	}
 }

@@ -7,3 +7,5 @@
 #JAVA (((IF FALSE) ONE) TWO)
 
 (INC TWO)
+
+#REDUCE (INC TWO)

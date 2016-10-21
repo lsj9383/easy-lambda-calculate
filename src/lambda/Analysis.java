@@ -23,12 +23,23 @@ public class Analysis {
 			ArrayList<String> parts = Expression.Split(origin);
 			System.out.println(Analysis.Integer(Expression.AST(parts.get(1))));
 			return new Expression();
+		}else if(origin.indexOf("#REDUCE") != -1){
+			ArrayList<String> parts = Expression.Split(origin);
+			DisplayReduce(Expression.AST(parts.get(1)));
+			return new Expression();
 		}else if(origin.indexOf("=") == -1){
 			return Expression.AST(origin);
 		}else{
 			ArrayList<String> parts = Expression.Split(origin);
 			Expression.env.Blind(parts.get(0), Expression.AST(parts.get(2)));
 			return new Expression();
+		}
+	}
+	
+	private static void DisplayReduce(Expression exp){
+		while(exp != null){
+			System.out.println(exp);
+			exp = exp.Reduce();			
 		}
 	}
 }

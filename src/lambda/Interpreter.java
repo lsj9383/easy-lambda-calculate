@@ -8,8 +8,11 @@ import java.util.Scanner;
 
 public class Interpreter {
 	public static void Loop(){
+		
+		
 		//1).读取文件
 		LoadDefinition("./src/Main.lc");
+		System.out.println("======================================");
 		
 		//2).控制台循环
 		while(true){
