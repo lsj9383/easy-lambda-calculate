@@ -18,22 +18,21 @@ public class Expression {
 		env = new Environment();
 	}
 	
-	public Expression Replace(Variable origin, Expression replacement){return null;}
+	protected Expression Replace(Variable origin, Expression replacement){return null;}
 	public Expression Eval(){return null;}
 	public Expression Reduce(){return null;}
+	
 	public boolean canCall(){return false;}
 	public boolean canReduce(){return false;}
 	public boolean isNumber(){ return false; }
 	public boolean isInc(){return false;}
 	
 	public static Expression AST(String origin){
-		ArrayList<String> parts = Split(origin);
+		ArrayList<String> parts = Analysis.Split(origin);
 		
 		if(parts.size()==0){
 			return null;
-		}
-		
-		if(parts.size() == 1){
+		}else if(parts.size() == 1){
 			return new Variable(origin);
 		}else if(parts.get(1).equals("lambda")){			//Function
 			return new Function((Variable)AST(parts.get(2)), AST(parts.get(3)));
@@ -42,52 +41,6 @@ public class Expression {
 		}else{
 			return null;
 		}
-	}
-	
-	static public ArrayList<String> Split(String s){
-		Scanner stdin;
-		ArrayList<String> subexps = new ArrayList<String>();
-		
-		if(s.charAt(0)=='(' && s.charAt(s.length()-1)==')'){
-			stdin = new Scanner(s.substring(1, s.length()-1));
-			subexps.add("(");
-		}
-		else{
-			stdin = new Scanner(s);
-		}
-		
-		while(stdin.hasNext())
-		{
-			String new_s = stdin.next();
-			int bs = LeftBracketSize(new_s);
-			while(bs!=0)
-			{
-				new_s += " "+stdin.next();
-				bs = LeftBracketSize(new_s);
-			}
-			subexps.add(new_s);
-		}
-		
-		if(s.charAt(0)=='(' && s.charAt(s.length()-1)==')'){
-			subexps.add(")");
-		}
-		
-		return subexps;
-	}
-	
-	static private int LeftBracketSize(String s){
-		int res = 0;
-		
-		for(int i=0; i<s.length(); i++){
-			if( s.charAt(i) == '('){
-				res++;
-			}
-			else if(s.charAt(i) == ')'){
-				res--;
-			}
-		}
-		
-		return res;
 	}
 }
 
@@ -117,7 +70,7 @@ class Number extends Expression{
 
 class INC extends Expression{
 	@Override
-	public Expression Replace(Variable origin, Expression replacement) {
+	protected Expression Replace(Variable origin, Expression replacement) {
 		return this;
 	}
 	
@@ -156,7 +109,7 @@ class Variable extends Expression{
 	}
 	
 	@Override
-	public Expression Replace(Variable origin, Expression replacement){
+	protected Expression Replace(Variable origin, Expression replacement){
 		if(name.equals(origin.name)){
 			return replacement;
 		}else{
@@ -190,7 +143,7 @@ class Function extends Expression{
 	}
 	
 	@Override
-	public Expression Replace(Variable origin, Expression replacement) {	
+	protected Expression Replace(Variable origin, Expression replacement) {	
 		if(parameter.name.equals(origin.name)){	//约束变量不替换
 			return this;
 		}else{
@@ -249,7 +202,7 @@ class Call extends Expression{
 	}
 	
 	@Override
-	public Expression Replace(Variable origin, Expression replacement) {
+	protected Expression Replace(Variable origin, Expression replacement) {
 		Expression Left = left.Replace(origin, replacement);
 		Expression Right = right.Replace(origin, replacement);
 		return new Call(Left, Right);

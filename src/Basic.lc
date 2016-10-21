@@ -21,3 +21,7 @@ SEVEN = ((SUB NINE) TWO)
 TRUE  = (lambda x (lambda y x))
 FALSE = (lambda x (lambda y y))
 IF = (lambda b b)
+ZERO? = (lambda n ((n (lambda x FALSE)) TRUE))
+LESS_EQU? = (lambda m (lambda n (ZERO? ((SUB m) n))))
+
+MOD = (lambda m (lambda n (((IF ((LESS_EQU? n) m)) (lambda x (((MOD ((SUB m) n)) n) x) )) m) ))
