@@ -28,6 +28,10 @@ public class Expression {
 	public static Expression AST(String origin){
 		ArrayList<String> parts = Split(origin);
 		
+		if(parts.size()==0){
+			return null;
+		}
+		
 		if(parts.size() == 1){
 			return new Variable(origin);
 		}else if(parts.get(1).equals("lambda")){			//Function

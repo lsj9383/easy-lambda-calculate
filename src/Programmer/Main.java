@@ -4,7 +4,7 @@ import lambda.*;
 
 public class Main {
 	public static void main(String[] args){
-		Interpreter.Test();
+		Interpreter.Loop();
 		System.out.println("Main Done!");
 	}
 }

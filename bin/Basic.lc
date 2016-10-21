@@ -1,0 +1,23 @@
+SLIDE = (lambda p ((PAIR 	(RIGHT p)) (INC (RIGHT p))))
+
+INC = (lambda n (lambda p (lambda x (p ((n p) x)))))
+DEC = (lambda n (LEFT ((n SLIDE) ((PAIR ZERO) ZERO))))
+ADD = (lambda m (lambda n ((n INC) m)))
+SUB = (lambda m (lambda n ((n DEC) m)))
+
+PAIR = (lambda x (lambda y (lambda f ((f x) y))))
+LEFT = (lambda p (p (lambda x (lambda y x))))
+RIGHT = (lambda p (p (lambda x (lambda y y))))
+
+ZERO  = (lambda p (lambda x x))
+ONE   = (lambda p (lambda x (p x)))
+TWO   = (lambda p (lambda x (p (p x))))
+THREE = (lambda p (lambda x (p (p (p x)))))
+FOUR  = (DEC FIVE)
+FIVE  = (INC (INC THREE))
+NINE  = ((ADD FIVE) FOUR)
+SEVEN = ((SUB NINE) TWO)
+
+TRUE  = (lambda x (lambda y x))
+FALSE = (lambda x (lambda y y))
+IF = (lambda b b)
