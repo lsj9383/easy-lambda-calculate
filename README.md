@@ -1,6 +1,6 @@
 #EasyLC
 Ò»ÖÖ¼òµ¥µÄLambda Calculus½âÊÍÆ÷JavaÊµÏÖ¡£ÔÚÖ§³ÖLambda CalculusµÄ·ûºÅ¹æÔòµÄÇ°ÌáÏÂ£¬ÓÐ×ÅÒ×µ÷ÊÔ£¬Ò×±àÐ´µÄÌØÐÔ¡£
-![](https://github.com/lsj9383/EasyLC/blob/master/icon/title.jpg)
+![](https://github.com/lsj9383/EasyLC/blob/master/icon/title.png)
 
 ##Ò»¡¢ÔËÐÐ
 ¸Ã¹¤³Ì¿ÉÒÔÊ¹ÓÃEclipse»òÊÇMyEclipse´ò¿ª£¬²¢Í¨¹ý¸ÃIDEÔËÐÐ(ºóÆÚ»áÒýÈëjar°ü£¬²¢Í¨¹ýjar°üÔËÐÐ)¡£Õû¸ölcµÄ´úÂë±àÐ´Î»ÖÃÔÚ`./src/`Â·¾¶ÏÂ£¬ÎªÁË±êÊ¶Çå³þ£¬Çë½«lc´úÂëÎÄ¼þÓÃ`.lc`×÷Îªºó×ºÃû¡£Ä¬ÈÏÒÔ`./src/Main.lc`×÷Îª³ÌÐòÈë¿Ú¡£
@@ -25,7 +25,7 @@ lambdaÑÝËãµÄº¯Êýµ÷ÓÃ£¬ÍêÈ«¾ÍÊÇÍ¨¹ý`·ûºÅÌæ»»`ÊµÏÖµÄ¡£·ûºÅÌæ»»Âú×ãalphaºÍbetaÔ¼Êø£
 °´ÕÕlambdaÑÝËãµÄ±ê×¼£¬ÊÇÃ»ÓÐ»·¾³ÕâÒ»¸ÅÄîµÄ£¬Ò²Ã»ÓÐ"="ÕâÑùµÄÓï·¨¡£Èô°´ÕÕlambdaÑÝËãµÄ±ê×¼Óï·¨À´Ð´£¬ÕâÑùµ÷ÊÔÆðÀ´½«»áÏàµ±²»±ã£¬Òò´ËÕâÀïÒýÈëÁËÈ«¾Ö»·¾³ºÍ°ó¶¨Ô¼ÊøµÄ¸ÅÄî¡£<br>
 <br>
 **Ô¼Êø°ó¶¨**:<br>
-<KEY> = <LCExpression>
+`<KEY> = <LCExpression>`
 Ê¹ÓÃ·ûºÅ`=`, ¿ÉÒÔ½«Æä×óÓÒÁ½²àµÄÊý¾Ý°ó¶¨ÔÚÒ»Æð¡£ÔÚÔËÐÐ¸ÃÓï¾äºó£¬<KEY>µÄÖµ½«»á±»¼ÇÂ¼£¬µ±ÏÂ´ÎÊ¹ÓÃ<KEY>Ê±£¬»á×Ô¶¯Ìæ»»Îª<LCExpression>¡£Èç:<br>
 ```LC
 1 = (lambda p (lambda x (p x)))
