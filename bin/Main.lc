@@ -1,14 +1,3 @@
-		
- 			
-     
 @IMPORT "./src/Basic.lc"
 
-@JAVA ONE
-@JAVA TWO
-@JAVA THREE
-@JAVA ((ADD ONE) TWO)
-@JAVA (((IF FALSE) ONE) TWO)
-
-(INC TWO)
-
-@REDUCE ((SUB ((ADD TWO) THREE)) ONE)
+SUM = (lambda start (lambda end (((IF ((LESS_EQU? start) end)) (lambda x (((ADD start) ((SUM (INC start)) end) ) x))) 0)))

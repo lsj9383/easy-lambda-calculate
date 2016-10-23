@@ -1,12 +1,21 @@
 package lambda;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class Interpreter {
+	static PrintStream tmpOut;
+	static{
+		try {
+			tmpOut = new PrintStream("./tmp/data");
+		} catch (IOException e) {}
+	}
 	//主循环
 	public static void Loop(){
 		//1).读取文件
@@ -40,6 +49,7 @@ public class Interpreter {
 					continue;
 				}
 				System.out.println(exp);
+				tmpOut.println(exp);
 				ShowExpression(Analysis.Execute(exp));
 				exp = br.readLine();
 			}
@@ -47,10 +57,28 @@ public class Interpreter {
 		return ;
 	}
 	
+	public static void SaveTmp(){
+		try {
+			tmpOut.close();
+			tmpOut = new PrintStream(new FileOutputStream("./tmp/data", true));
+		} catch (FileNotFoundException e) {}
+	}
+	
+	public static void DisplayReduce(Expression exp){
+		while(exp != null){
+			String output = "->"+exp;
+			System.out.println(output);
+			tmpOut.println(output);
+			exp = exp.Reduce();			
+		}
+	}
+	
 	private static void ShowExpression(Expression EXP){
 		if(EXP != null){
 			if(EXP.Eval() != null){
-				System.out.println("->"+EXP.Eval().toString());	
+				String output = "->"+EXP.Eval().toString();
+				System.out.println(output);	
+				tmpOut.println(output);
 			}
 		}
 	}

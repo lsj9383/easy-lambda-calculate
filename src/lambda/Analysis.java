@@ -25,7 +25,11 @@ public class Analysis {
 			return new Expression();
 		}else if(origin.indexOf("@REDUCE") != -1){
 			ArrayList<String> parts = Split(origin);
-			DisplayReduce(Expression.AST(parts.get(1)));
+			Interpreter.DisplayReduce(Expression.AST(parts.get(1)));
+			return new Expression();
+		}
+		else if(origin.indexOf("@TMP") != -1){
+			Interpreter.SaveTmp();
 			return new Expression();
 		}else if(origin.indexOf("=") == -1){
 			return Expression.AST(origin);
@@ -33,13 +37,6 @@ public class Analysis {
 			ArrayList<String> parts = Split(origin);
 			Expression.env.Blind(parts.get(0), Expression.AST(parts.get(2)));
 			return new Expression();
-		}
-	}
-	
-	private static void DisplayReduce(Expression exp){
-		while(exp != null){
-			System.out.println("->"+exp);
-			exp = exp.Reduce();			
 		}
 	}
 	
