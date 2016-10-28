@@ -11,10 +11,9 @@ public class Expression {
 	public Expression Reduce(){return null;}
 	
 	protected Expression Replace(Variable origin, Expression replacement){return null;}
+	protected Expression Apply(Expression newParameter){return null;}
 	protected boolean canCall(){return false;}
 	protected boolean canReduce(){return false;}
-	protected boolean isNumber(){ return false; }
-	protected boolean isInc(){return false;}
 	
 	public static Expression AST(String origin){
 		ArrayList<String> parts = Analysis.Split(origin);
@@ -42,11 +41,6 @@ class Number extends Expression{
 	}
 	
 	@Override
-	protected boolean isNumber() {
-		return true;
-	}
-	
-	@Override
 	public String toString() {
 		return ""+number;
 	}
@@ -64,8 +58,8 @@ class INC extends Expression{
 	}
 	
 	@Override
-	protected boolean isInc(){
-		return true;
+	protected Expression Apply(Expression newParameter){
+		return new Number(((Number)newParameter).number+1);
 	}
 	
 	@Override
@@ -140,6 +134,10 @@ class Function extends Expression{
 		}
 	}
 	
+	@Override
+	protected Expression Apply(Expression newParameter){	//将新的参数应用到过程体里，就是一个符号替换
+		return body.Replace(this.parameter, newParameter).Eval();
+	}
 	
 	@Override
 	public String toString(){
@@ -173,12 +171,7 @@ class Call extends Expression{
 		if(left.canCall()){
 			return new Call(left.Eval(), right.Eval()).Eval();
 		}else{
-			if(!left.isInc()){
-				Function Left = (Function)left.Eval();
-				return Left.body.Replace(Left.parameter, right.Eval()).Eval();
-			}else{
-				return new Number(((Number)right.Eval()).number+1);
-			}
+			return left.Eval().Apply(right.Eval());
 		}
 	}
 	
