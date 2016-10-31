@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Analysis {
-	
-	public static void Integer(Expression exp){
-		Expression cal = new Call(new Call(exp, new INC()), new Number(0));
-		Expression result =cal.Eval(); 
-		System.out.println("->"+((Number)result).number);
-	}
-	
 	static public ArrayList<String> Split(String s){
 		Scanner stdin;
 		ArrayList<String> subexps = new ArrayList<String>();

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Statement {
 	enum TYPE{
 		IMPORT,
-		JAVA,
+		INT,
 		REDUCE,
-		TMP,
+		LOG,
 		BLIND,
 		EXPRESSION,
 		NULL
@@ -18,12 +18,12 @@ public class Statement {
 			return TYPE.NULL;
 		}else if(origin.indexOf("@IMPORT") != -1){
 			return TYPE.IMPORT;
-		}else if(origin.indexOf("@JAVA") != -1){
-			return TYPE.JAVA;
+		}else if(origin.indexOf("@INT") != -1){
+			return TYPE.INT;
 		}else if(origin.indexOf("@REDUCE") != -1){
 			return TYPE.REDUCE;
-		}else if(origin.indexOf("@TMP") != -1){
-			return TYPE.TMP;
+		}else if(origin.indexOf("@LOG") != -1){
+			return TYPE.LOG;
 		}else if(origin.indexOf("=") != -1){
 			return TYPE.BLIND;
 		}else{

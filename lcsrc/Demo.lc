@@ -1,7 +1,8 @@
-@IMPORT "./src/Basic.lc"
-
 SUM = (lambda start (lambda end (((IF ((LESS_EQU? start) end)) (lambda x (((ADD start) ((SUM (INC start)) end) ) x))) 0)))
 
-@JAVA 2
+sum_0_5 = ((SUM 0) ((ADD 5) 5))
 
-@JAVA ((SUM 0) ((ADD 5) 5))
+@REDUCE ((SUM 0) ((ADD 5) 5))
+@INT sum_0_5
+
+@LOG

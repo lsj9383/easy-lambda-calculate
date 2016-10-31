@@ -14,7 +14,7 @@ public class Interpreter {
 	
 	//Ö÷Ñ­»·
 	public static void Loop(){
-		LoadModule("./src/Main.lc");
+		LoadModule("./lcsrc/Main.lc");
 		System.out.println("===========================================================");
 		
 		while(true){
@@ -63,9 +63,9 @@ public class Interpreter {
 	private static StmtResult Execute(String origin){
 		switch(Statement.Type(origin)){
 		case IMPORT:	return EvalImport(origin);
-		case JAVA:		return EvalJava(origin);
+		case INT:		return EvalInt(origin);
 		case REDUCE:	return EvalReduce(origin);
-		case TMP:		return EvalTmp(origin);
+		case LOG:		return EvalTmp(origin);
 		case BLIND:		return EvalBlind(origin);
 		case EXPRESSION:return EvalExpression(origin);
 		default: 		return new StmtResult(StmtResult.TYPE.SKIP);
@@ -78,9 +78,12 @@ public class Interpreter {
 		return new StmtResult(StmtResult.TYPE.RIGHT);
 	}
 	
-	private static StmtResult EvalJava(String origin){
+	private static StmtResult EvalInt(String origin){
 		ArrayList<String> parts = Analysis.Split(origin);
-		Analysis.Integer(Expression.AST(parts.get(1)));
+		Expression exp = Expression.AST(parts.get(1));
+		Expression cal = new Call(new Call(exp, new INC()), new Number(0));
+		Expression result =cal.Eval(); 
+		System.out.println("->"+((Number)result).number);
 		return new StmtResult(StmtResult.TYPE.RIGHT);
 	}
 	

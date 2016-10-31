@@ -1,0 +1,2 @@
+@IMPORT "./lcsrc/Basic.lc"
+@IMPORT "./lcsrc/Demo.lc"
