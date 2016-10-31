@@ -15,6 +15,7 @@
 -----|------
 Main | 程序入口，默认为`./lcsrc/Main.lc`
 Log  | 日志文件，默认为`./tmp/log`
+-------------
 
 ##三、语法
 EasyLC本质是Lambda Calculus，并在其基础上做了丰富，方便研究人员调试。在`附录-Lambda Calculus`中，会给出Lambda演算的的BNF表示，并给出解释。虽然在这里不描述lambda演算语法具体的内容，但也会给出相应的语法形式。这里展现出该解释器的特殊语法:
