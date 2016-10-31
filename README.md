@@ -1,61 +1,62 @@
 #EasyLC
-һ�ּ򵥵�Lambda Calculus������Javaʵ�֡���֧��Lambda Calculus�ķ��Ź����ǰ���£������׵��ԣ��ױ�д�����ԡ�
+一种简单的Lambda Calculus解释器Java实现。在支持Lambda Calculus的符号规则的前提下，有着易调试，易编写的特性。
 <p align="center">
   <img src="https://github.com/lsj9383/EasyLC/blob/master/icon/title.png?raw=true" alt="Y"/>
 </p>
-[����](https://github.com/lsj9383/EasyLC/blob/master/lcsrc/Demo.lc)��һ����lc������
+[这里](https://github.com/lsj9383/EasyLC/blob/master/lcsrc/Demo.lc)有一个简单lc范例。
 	
-##һ������
-�ù��̿���ʹ��Eclipse����MyEclipse�򿪣���ͨ����IDE����(���ڻ�����jar������ͨ��jar������)������lc�Ĵ����дλ����`./lcsrc/`·���£�Ϊ�˱�ʶ������뽫lc�����ļ���`.lc`��Ϊ��׺����Ĭ����`./lcsrc/Main.lc`��Ϊ������ڡ�
+##一、运行
+该工程可以使用Eclipse或是MyEclipse打开，并通过该IDE运行(后期会引入jar包，并通过jar包运行)。整个lc的代码编写位置在`./lcsrc/`路径下，为了标识清楚，请将lc代码文件用`.lc`作为后缀名。默认以`./lcsrc/Main.lc`作为程序入口。
 
-##���������ļ�
-����·���µ�`lc.conf`Ϊ�����ļ������а����������ò�����
+##二、配置文件
+工程路径下的`lc.conf`为配置文件，其中包含以下配置参数：
 
-��Ŀ | ˵�� 
+项目 | 说明 
 -----|------
-Main | ������ڣ�Ĭ��Ϊ`./lcsrc/Main.lc`
-Log  | ��־�ļ���Ĭ��Ϊ`./tmp/log`
+Main | 程序入口(./lcsrc/Main.lc)
+Log  | 日志文件(./tmp/log)
+--------------
 
-##�����﷨
-EasyLC������Lambda Calculus����������������˷ḻ�������о���Ա���ԡ���`��¼-Lambda Calculus`�У������Lambda����ĵ�BNF��ʾ�����������͡���Ȼ�����ﲻ����lambda�����﷨��������ݣ���Ҳ�������Ӧ���﷨��ʽ������չ�ֳ��ý������������﷨:
+##三、语法
+EasyLC本质是Lambda Calculus，并在其基础上做了丰富，方便研究人员调试。在`附录-Lambda Calculus`中，会给出Lambda演算的的BNF表示，并给出解释。虽然在这里不描述lambda演算语法具体的内容，但也会给出相应的语法形式。这里展现出该解释器的特殊语法:
 
-###1.���庯��
+###1.定义函数
 (lambda <param> <body>)
-��Ҫע�����<param>��<body>��Ӧ����lambda����ı���ʽ�����ֻ����һ�����š�һ���������û���һ���������塣��:<br>
-(lambda x x) ������<param>Ϊx��<body>��Ϊx�ĺ���
+需要注意的是<param>和<body>都应该是lambda演算的表达式，因此只能是一个符号、一个函数调用或是一个函数定义。如:<br>
+(lambda x x) 定义了<param>为x，<body>因为x的函数
 <br>
-(lambda p (lambda x (p x))) ������һ��<param>Ϊp��<body>Ϊ(lambda x (p x))�������ԣ�p����һ��������<body>����һ���������塣
+(lambda p (lambda x (p x))) 定义了一个<param>为p，<body>为(lambda x (p x))。很明显，p是另一个函数，<body>是另一个函数定义。
 
-###2.��������
+###2.函数调用
 (<fun> <param>)
-��Ҫע�����<fun>��<param>��Ӧ����lambda����ı���ʽ�����ֻ����һ�����š�һ���������û���һ���������塣��:<br>
-(p x) ��ʵ��һ���������á�<br>
-lambda����ĺ������ã���ȫ����ͨ��`�����滻`ʵ�ֵġ������滻����alpha��betaԼ�������ڸ�¼�н���.
+需要注意的是<fun>和<param>都应该是lambda演算的表达式，因此只能是一个符号、一个函数调用或是一个函数定义。如:<br>
+(p x) 将实现一个函数调用。<br>
+lambda演算的函数调用，完全就是通过`符号替换`实现的。符号替换满足alpha和beta约束，将在附录中介绍.
 
-###3.ȫ�ֻ������Լ��
-����lambda����ı�׼����û�л�����һ����ģ�Ҳû��"="�������﷨��������lambda����ı�׼�﷨��д�������������������൱���㣬�������������ȫ�ֻ����Ͱ�Լ���ĸ��<br>
+###3.全局环境与绑定约束
+按照lambda演算的标准，是没有环境这一概念的，也没有"="这样的语法。若按照lambda演算的标准语法来写，这样调试起来将会相当不便，因此这里引入了全局环境和绑定约束的概念。<br>
 <br>
-**Լ����**:<br>
+**约束绑定**:<br>
 `<KEY> = <LCExpression>`
-ʹ�÷���`=`, ���Խ���������������ݰ���һ�������и�����<KEY>��ֵ���ᱻ��¼�����´�ʹ��<KEY>ʱ�����Զ��滻Ϊ<LCExpression>����:<br>
+使用符号`=`, 可以将其左右两侧的数据绑定在一起。在运行该语句后，<KEY>的值将会被记录，当下次使用<KEY>时，会自动替换为<LCExpression>。如:<br>
 ```LC
 1 = (lambda p (lambda x (p x)))
 INC = (lambda n (lambda p (lambda x (p ((n p) x)))))
 2 = (INC 1)
 ```
-�����ԣ���Լ���󶨺󣬿�����lambda����ķ�����ֱ��ʹ�ý���Լ���ķ��š����Ƿǳ������ڼ�¼���ݵġ���Ҫע����ǣ����ǿ��Ը��ĵģ��������ں������н��и��ġ�**ֻ����������н���Լ���ĸ���**��һ������Ա�֤����ļ��ԣ���һ����lambda���㱾���Ͳ����ں��������������Ĳ�����
+很明显，当约束绑定后，可以在lambda演算的符号中直接使用建立约束的符号。这是非常有利于记录数据的。需要注意的是，绑定是可以更改的，但不能在函数体中进行更改。**只能在最外层中进行约束的更改**，一方面可以保证程序的简单性，另一方面lambda演算本身就不能在函数体中有这样的操作。
 <br>
-**ȫ�ֻ���**:<br>
-������ά����һ��ȫ�ֻ�����������Ҳֻ�������һ���������������¼�����е�Լ����
+**全局环境**:<br>
+解释器维护了一个全局环境，解释器也只有这个单一环境。这个环境记录了所有的约束。
 
 ###4.@INT
-lambda��������֮������ֵ���ǲ����ڵģ���ֵ��Ҫ�ú���ȥ���塣����ֵ���ˣ���������Ƕ���������ֱ�۵�֪�������ֵ�Ƕ���Ƿǳ����ѵģ�����ṩ��`@JAVA <Identify>`���﷨�����Խ��������Ϊ��ֵ(�������������������)��
+lambda演算神奇之处是数值都是不存在的，数值需要用函数去定义。若数值大了，或是有了嵌套情况，想直观的知道这个数值是多大是非常困难的，因此提供了`@JAVA <Identify>`的语法，可以将符号输出为数值(若这个符号是邱奇编码的)。
 
 ###5.@REDUCE
-lambda������һϵ�еķ����滻�����������൱���ѡ�Ϊ�˼�������Ѷȣ����Ƿ����滻�Ĺ��̸�Ϊֱ�ۣ�������`@REDUCE <LCExpression>`������﷨�ὫLC����ʽ�����滻�����в�������Ĵ�ӡ�ڿ���̨�С�
+lambda演算是一系列的符号替换，调试起来相当困难。为了减轻调试难度，并是符号替换的过程更为直观，定义了`@REDUCE <LCExpression>`，这个语法会将LC表达式符号替换的所有步骤清楚的打印在控制台中。
 
 ###6.@IMPORT
-���������C/C++�е�include"..", ��˸ý���������ͨ��@IMPORT���м򵥵�ģ�黯�������������������`@IMPORT <FilePath>`ʱ���������ָ����.lc�ļ���ȥ���Ƚϵ��͵ļ�ģ�黯��Ʒ����ǣ�
+这个类似于C/C++中的include"..", 因此该解释器可以通过@IMPORT进行简单的模块化操作。当解释器解读到`@IMPORT <FilePath>`时，便会跳到指定的.lc文件中去。比较典型的简单模块化设计方案是：
 ```LC
 /* Main.lc */
 @IMPORT "./src/Basic.lc"
@@ -70,21 +71,21 @@ lambda������һϵ�еķ����滻�����������൱���ѡ�Ϊ�˼�������Ѷȣ����Ƿ����滻��
 ...
 ```
 
-������������У�����Basic.lc�ж������䣬��Basic.lc���ֿ��Զ����������һϵ����䣬����Ԥ��������֡���ѧ������ν�ʡ��߼������Ƶȵ���䡣�����˷ḻ�Ļ������󣬱������Main.lc�н�����صĴ�����(�����Ӻ��鷳��)����Ҫע�����:<br>
-a).<FilePath>����ʹ�����·����"./"��ָ�ĵ�ǰ�ļ��о��������ֿ��ļ��С�<br>
-b).�ļ���@IMPORT˳����Ĭ������¹�ϵ�ģ�������ʹ��@JAVA��������䣬��ô�ͻ��˳���й�ϵ����Ϊ�����ȼ���A�ļ���������ʹ����`@JAVA A`����Ҫ��֤���������֮ǰ�Ѿ������ˡ�
+在主函数入口中，加载Basic.lc中定义的语句，在Basic.lc中又可以额外加载其他一系列语句，包括预定义的数字、数学操作、谓词、逻辑流控制等等语句。在有了丰富的基本语句后，便可以在Main.lc中进行相关的处理了(造轮子很麻烦的)。需要注意的是:<br>
+a).<FilePath>中若使用相对路，则"./"所指的当前文件夹就是整个仓库文件夹。<br>
+b).文件的@IMPORT顺序在默认情况下关系的，但若是使用@JAVA这样的语句，那么就会和顺序有关系。因为若首先加载A文件，且其中使用了`@JAVA A`，需要保证这个符号在之前已经被绑定了。
 
 ###7.@LOG
-`@REDUCE`ָ���չʾ�����еĹ�Լ���̣���Щ����ʽ�Ĺ�Լ�ǳ���������̨�޷�������ô�����ݡ����Ϊ�˷��㣬�ṩ�˽�������浽"./tmp/log"�ļ��е����ֻҪʹ��`@TMP`�ͻὫ֮ǰ�������ȫ�����浽���ļ��С�
+`@REDUCE`指令会展示出所有的规约过程，有些表达式的规约非常长，控制台无法缓存那么多内容。因此为了方便，提供了将输出保存到"./tmp/log"文件中的命令。只要使用`@TMP`就会将之前的输出，全部保存到该文件中。
 
-##��¼
+##附录
 
 ###Lambda Calculus
 ```
 <exp>	:=	Identify
-		:=	��.<exp> <exp>
+		:=	λ.<exp> <exp>
 		:=	(<exp> <exp>)
 ```
 
 ###BNF
-BNF���Ϳ�˹��ʽ����һ����ʽ���ķ����������������Ե��﷨��
+BNF即巴科斯范式，以一种形式化的符号来描述给定语言的语法。
