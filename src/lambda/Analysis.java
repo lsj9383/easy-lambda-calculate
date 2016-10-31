@@ -11,35 +11,6 @@ public class Analysis {
 		System.out.println("->"+((Number)result).number);
 	}
 	
-	public static Expression Execute(String origin){
-		
-		if(origin.equals("")){	// ‰»Î»ÙŒ™ø’£¨∑≈∆˙
-			return null;
-		}else if(origin.indexOf("@IMPORT") != -1){
-			String[] parts = origin.split(" ");
-			Interpreter.LoadModule(parts[1].substring(1, parts[1].length()-1));
-			return new Expression();
-		}else if(origin.indexOf("@JAVA") != -1){
-			ArrayList<String> parts = Split(origin);
-			Analysis.Integer(Expression.AST(parts.get(1)));
-			return new Expression();
-		}else if(origin.indexOf("@REDUCE") != -1){
-			ArrayList<String> parts = Split(origin);
-			Interpreter.DisplayReduce(Expression.AST(parts.get(1)));
-			return new Expression();
-		}
-		else if(origin.indexOf("@TMP") != -1){
-			Interpreter.SaveTmp();
-			return new Expression();
-		}else if(origin.indexOf("=") == -1){
-			return Expression.AST(origin);
-		}else{
-			ArrayList<String> parts = Split(origin);
-			Expression.env.Blind(parts.get(0), Expression.AST(parts.get(2)));
-			return new Expression();
-		}
-	}
-	
 	static public ArrayList<String> Split(String s){
 		Scanner stdin;
 		ArrayList<String> subexps = new ArrayList<String>();

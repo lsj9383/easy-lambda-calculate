@@ -1,25 +1,54 @@
 @IMPORT "./src/Basic.lc"
 0 = (lambda p (lambda x x))
+->OK
 1 = (lambda p (lambda x (p x)))
+->OK
 2 = (lambda p (lambda x (p (p x))))
+->OK
 3 = (lambda p (lambda x (p (p (p x)))))
+->OK
 4 = (lambda p (lambda x (p (p (p (p x))))))
+->OK
 5 = (lambda p (lambda x (p (p (p (p (p x)))))))
+->OK
+
 SLIDE = (lambda pair ((PAIR (RIGHT pair)) (INC (RIGHT pair))))
+->OK
 INC = (lambda n (lambda p (lambda x (p ((n p) x)))))
+->OK
 DEC = (lambda n (LEFT ((n SLIDE) ((PAIR 0) 0))))
+->OK
 ADD = (lambda n (lambda m ((m INC) n)))
+->OK
 SUB = (lambda n (lambda m ((m DEC) n)))
+->OK
+
+
 ZERO? = (lambda m ((m (lambda x FALSE)) TRUE))
+->OK
 LESS_EQU? = (lambda m (lambda n (ZERO? ((SUB m) n))))
+->OK
 TRUE = (lambda x (lambda y x))
+->OK
 FALSE = (lambda x (lambda y y))
+->OK
 IF = (lambda a (lambda b (lambda c ((a b) c))))
+->OK
+
+
 PAIR = (lambda m (lambda n (lambda buff ((buff m) n))))
+->OK
 LEFT = (lambda pair (pair (lambda m (lambda n m))))
+->OK
 RIGHT = (lambda pair (pair (lambda m (lambda n n))))
+->OK
+->OK
+
 SUM = (lambda start (lambda end (((IF ((LESS_EQU? start) end)) (lambda x (((ADD start) ((SUM (INC start)) end) ) x))) 0)))
+->OK
+
 @JAVA 2
+->OK
+
 @JAVA ((SUM 0) ((ADD 5) 5))
-->¦Ë.x { x }
-->¦Ë.y { p [y] }
+->OK

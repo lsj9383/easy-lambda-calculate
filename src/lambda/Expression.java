@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Expression {
 	
-	public static Environment env = new Environment();
+	public static Environment env = Environment.EnvInstance();
 	
 	public Expression Eval(){return null;}
 	public Expression Reduce(){return null;}
