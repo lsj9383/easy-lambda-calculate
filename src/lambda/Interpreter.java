@@ -20,33 +20,37 @@ public class Interpreter {
 		while(true){
 			Scanner stdin = new Scanner(System.in);
 			System.out.print("Eval Input : ");
-			ShowResult(Eval(stdin.nextLine()));
+			ShowResult(Execute(stdin.nextLine()));
 		}
 	}
 	
 	//加载某个文件的内容
 	public static void LoadModule(String fileName){		
+		BufferedReader br = null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
+			br = new BufferedReader(new FileReader(new File(fileName)));
 			String exp =  null;
 			
 			while((exp = br.readLine()) != null) {
 				System.out.println(exp);
 				LogOut.println(exp);
-				ShowResult(Eval(exp));
+				ShowResult(Execute(exp));
 			}
-		} catch (Exception e) {System.out.println(fileName + "catch wrong!");}
-		return ;
+			
+		} catch (Exception e) {System.out.println(fileName + "catch wrong!");}finally{
+			if(br==null){
+				try {br.close();} catch (IOException e) {}
+			}
+		}
 	}
 	
 	private static void ShowResult(StmtResult stmtResult){
-		
 		String output = null;
 		
 		switch (stmtResult.Type) {
 		case RIGHT: output = "->OK"; break;
 		case WRONG: output = "->ERROR"; break;
-		case AST:	output = "->"+stmtResult.Exp.Eval().toString();break;
+		case AST:	output = "->"+stmtResult.Exp.Eval().toString(); break;
 		case SKIP:	output = null; break;
 		}
 		
@@ -56,7 +60,7 @@ public class Interpreter {
 		}
 	}
 	
-	private static StmtResult Eval(String origin){
+	private static StmtResult Execute(String origin){
 		switch(Statement.Type(origin)){
 		case IMPORT:	return EvalImport(origin);
 		case JAVA:		return EvalJava(origin);
@@ -104,6 +108,6 @@ public class Interpreter {
 	}
 	
 	private static StmtResult EvalExpression(String origin){
-		return new StmtResult(Expression.AST(origin));
+		return new StmtResult(Expression.AST(origin).Eval());
 	}
 }

@@ -88,7 +88,11 @@ class Variable extends Expression{
 	
 	@Override
 	public Expression Eval(){
-		return env.Find(name).Eval();
+		if(env.Find(name) == null){
+			return null;
+		}else{
+			return env.Find(name).Eval();
+		}
 	}
 	
 	@Override
@@ -171,7 +175,11 @@ class Call extends Expression{
 		if(left.canCall()){
 			return new Call(left.Eval(), right.Eval()).Eval();
 		}else{
-			return left.Eval().Apply(right.Eval());
+			Expression leftEval = left.Eval();
+			if(leftEval == null){
+				return null;
+			}
+			return leftEval.Apply(right.Eval());
 		}
 	}
 	

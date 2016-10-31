@@ -53,7 +53,7 @@ class StmtResult{
 		if(exp == null){
 			this.Type = TYPE.WRONG;
 		}else{
-			this.Type = TYPE.RIGHT;	
+			this.Type = TYPE.AST;	
 		}
 	}
 	

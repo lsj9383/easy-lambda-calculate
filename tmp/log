@@ -52,3 +52,8 @@ SUM = (lambda start (lambda end (((IF ((LESS_EQU? start) end)) (lambda x (((ADD 
 
 @JAVA ((SUM 0) ((ADD 5) 5))
 ->OK
+->ERROR
+->ERROR
+->ERROR
+->OK
+->OK

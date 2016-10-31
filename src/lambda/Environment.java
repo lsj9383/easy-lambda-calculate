@@ -6,16 +6,16 @@ import java.util.Map;
 public class Environment {
 	
 	Map<String, Expression> Buffer = new HashMap<String, Expression>();
-	private static Environment env=null;
+	private static Environment Instance=null;
 	
 	
 	private Environment(){}
 	
 	public static Environment EnvInstance(){
-		if(env==null){
-			env = new Environment();
+		if(Instance==null){
+			Instance = new Environment();
 		}
-		return env;
+		return Instance;
 	}
 	
 	public void Blind(String name, Expression exp){
@@ -23,6 +23,9 @@ public class Environment {
 	}
 	
 	public Expression Find(String name){
+		if(!Buffer.containsKey(name)){
+			return null;
+		}
 		return Buffer.get(name);
 	}
 	
