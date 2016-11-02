@@ -1,6 +1,7 @@
 package lambda;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Environment {
@@ -31,6 +32,14 @@ public class Environment {
 	
 	@Override
 	public String toString(){
-		return Buffer.toString();
+		String s="[";
+		
+		for(String key : Buffer.keySet()){
+			s+=key+" : "+Buffer.get(key)+"\n";
+		}
+		
+		s+="]\n";
+		
+		return s;
 	}
 }

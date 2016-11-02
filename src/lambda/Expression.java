@@ -89,7 +89,7 @@ class Variable extends Expression{
 	@Override
 	public Expression Eval(){
 		if(env.Find(name) == null){
-			return null;
+			return this;
 		}else{
 			return env.Find(name).Eval();
 		}

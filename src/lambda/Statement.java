@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Statement {
 	enum TYPE{
+		ENV,
 		IMPORT,
 		INT,
 		REDUCE,
@@ -16,6 +17,8 @@ public class Statement {
 	public final static TYPE Type(String origin){
 		if(origin.equals("")){
 			return TYPE.NULL;
+		}else if(origin.equals("@ENV")){
+			return TYPE.ENV;
 		}else if(origin.indexOf("@IMPORT") != -1){
 			return TYPE.IMPORT;
 		}else if(origin.indexOf("@INT") != -1){

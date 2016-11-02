@@ -62,6 +62,7 @@ public class Interpreter {
 	
 	private static StmtResult Execute(String origin){
 		switch(Statement.Type(origin)){
+		case ENV:		return EvalEnv(origin);
 		case IMPORT:	return EvalImport(origin);
 		case INT:		return EvalInt(origin);
 		case REDUCE:	return EvalReduce(origin);
@@ -75,6 +76,11 @@ public class Interpreter {
 	private static StmtResult EvalImport(String origin){
 		String[] parts = origin.split(" ");
 		Interpreter.LoadModule(parts[1].substring(1, parts[1].length()-1));
+		return new StmtResult(StmtResult.TYPE.RIGHT);
+	}
+	
+	private static StmtResult EvalEnv(String origin){
+		System.out.println(Environment.EnvInstance());
 		return new StmtResult(StmtResult.TYPE.RIGHT);
 	}
 	

@@ -1,2 +1,29 @@
-@IMPORT "./lcsrc/Basic.lc"
-@IMPORT "./lcsrc/Demo.lc"
+0 = (lambda p (lambda x x))
+1 = (lambda p (lambda x (p x)))
+2 = (lambda p (lambda x (p (p x))))
+3 = (lambda p (lambda x (p (p (p x)))))
+4 = (lambda p (lambda x (p (p (p (p x))))))
+5 = (lambda p (lambda x (p (p (p (p (p x)))))))
+
+INC = (lambda n (lambda p (lambda x (p ((n p) x)))))
+ADD = (lambda n (lambda m ((n INC) m)))
+
+TRUE  = (lambda x (lambda y x))
+FALSE = (lambda x (lambda y y))
+IF = (lambda b (lambda e1 (lambda e2 ((b e1) e2) )))
+
+PAIR  = (lambda x (lambda y (lambda b (((IF b) x) y))))
+LEFT  = (lambda pair (pair TRUE))
+RIGHT = (lambda pair (pair FALSE))
+
+SLIDE = (lambda pair ((PAIR (RIGHT pair)) (INC (RIGHT pair))))
+DEC = (lambda n (LEFT ((n SLIDE) ((PAIR 0) 0))))
+SUB = (lambda n (lambda m ((m DEC) n)))
+
+ZERO? = (lambda n ((n (lambda x FALSE)) TRUE))
+LESS_EQU? = (lambda n (lambda m (ZERO? ((SUB n) m))))
+
+SUM = (lambda start (lambda end (((IF ((LESS_EQU? start) end)) (lambda x (((ADD start) ((SUM (INC start)) end)) x))) 0)))
+
+@REDUCE ((SUM 0) 5)
+@LOG
