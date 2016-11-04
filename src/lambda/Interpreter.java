@@ -2,19 +2,48 @@ package lambda;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 
+import Programmer.Main;
+
 public class Interpreter {
+	private static String LogFile;
+	private static String MainFile;
 	static PrintStream LogOut;
-	static{try {LogOut = new PrintStream("./tmp/log");} catch (IOException e) {}}
+	static{
+		Properties properties = new Properties();
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream("./conf/lc.conf");
+			properties.load(fis);
+			MainFile = properties.getProperty("MAIN");
+			LogFile = properties.getProperty("LOG");
+			LogOut = new PrintStream(LogFile);
+			
+		} 
+		catch (IOException e) {
+			System.out.println("initial error.");
+		}
+		finally {
+			if(fis!=null){
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	//Ö÷Ñ­»·
 	public static void Loop(){
-		LoadModule("./lcsrc/Main.lc");
+		LoadModule(MainFile);
 		System.out.println("===========================================================");
 		
 		while(true){
