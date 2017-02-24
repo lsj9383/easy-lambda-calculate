@@ -32,14 +32,14 @@ public class Environment {
 	
 	@Override
 	public String toString(){
-		String s="[";
+		String s="[\n";
 		
 		for(String key : Buffer.keySet()){
 			s+=key+" : "+Buffer.get(key)+"\n";
 		}
-		
 		s+="]\n";
 		
+		s = Buffer.entrySet().toString();
 		return s;
 	}
 }

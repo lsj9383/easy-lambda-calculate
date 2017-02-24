@@ -73,9 +73,49 @@ class INC extends Expression{
 	}
 }
 
+class Symbol extends Expression{
+	String name;
+	
+	public Symbol(String name){
+		this.name = name;
+	}
+	
+	@Override
+	public Expression Reduce() {
+		return env.Find(name);
+	}
+	
+	@Override
+	public Expression Eval(){
+		if(env.Find(name) == null){
+			return this;
+		}else{
+			return env.Find(name).Eval();
+		}
+	}
+	
+	@Override
+	protected Expression Replace(Variable origin, Expression replacement){
+		if(name.equals(origin.name)){
+			return replacement;
+		}else{
+			return this;
+		}
+	}
+	
+	@Override
+	protected boolean canReduce() {
+		return true;
+	}
+	
+	@Override
+	public String toString(){
+		return name;
+	}
+}
 
 class Variable extends Expression{
-	String name;
+String name;
 	
 	public Variable(String name){
 		this.name = name;
