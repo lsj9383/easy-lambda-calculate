@@ -92,8 +92,8 @@ b).文件的@IMPORT顺序在默认情况下关系的，但若是使用@JAVA这�
 ### Lambda Calculus
 ```
 <exp>	:=	Identify
-		:=	λ.<exp> <exp>
-		:=	(<exp> <exp>)
+	:=	λ.<exp> <exp>
+	:=	(<exp> <exp>)
 ```
 
 ### BNF
